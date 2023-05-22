@@ -14,8 +14,7 @@ def even(num):
         num=num+1
     else:
         print("odd")
-
-print(even(8))
+print(even())
 
 
 # age=int(input("enter your age")) 
@@ -26,5 +25,17 @@ print(even(8))
 #           print("not eligible")
          
 # vote()
+
+######
+######
+def addgenerator():
+    a=8
+    b=2
+    c=a+b
+    yield c
+    yield b
+var1=addgenerator()
+print(next(var1))
+print(next(var1))
 
  
