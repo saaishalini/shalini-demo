@@ -1,0 +1,20 @@
+#pandas 
+
+
+#dataframe-
+
+import pandas as role
+Project={
+"Team":["Project manager","Design","Developer","Testing","Marketing"],
+ "Salary":["50,000","30,000","30,000","20,000","25,000"]
+}
+x=role.DataFrame(Project)
+print(x)
+
+
+#series
+
+import pandas as pd
+students=["shalini","saranya","sangeetha","priya","nivetha"]
+x=pd.Series(students)
+print(x)
