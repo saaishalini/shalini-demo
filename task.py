@@ -1,88 +1,67 @@
+import csv
 import json
-employees = {
+# Create a CSV file to store employee data
+def create_employee_csv(filename):
+    header = ["Employee ID", "Name", "Age", "Designation", "Contact Number"]
+    employees =[
+        ["AA-001", "Saranya", 24, "Developer", "1234567890"],
+        ["AA-002","Riya", 30, "Manager", "9876543210"],
+        ["AA-003", "Jagan", 22, "Intern", "4567891230"],
+        ["AA-004", "Janani", 26, "Designer", "7890123456"],
+        ["AA-005", "Tamil", 35, "Analyst", "2345678901"],
+        ["AA-006", "Sachin", 28, "Sales manager", "9012345678"],
+        ["AA-007", "Saran", 23, "Developer", "5678901234"],
+        ["AA-008", "Naveen ", 40, "Designer", "0123456789"],
+        ["AA-009", " Jaya", 32, "Engineer", "3456789012"],
+        ["AA-010", "Sai", 27, "Intern", "8901234567"]
+    ]
+    with open(filename, "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerows(employees)
+create_employee_csv("employees.csv")
 
-"employee1":{
-  "employee_id": "AA-0001",
-  "employee_name": "Ram",
-  "employee_age":25,
-  "employee_role": "developer",
-  "mob_number" :"9080654389"
-},
-"employee2":{
+# Use generators to read employee data and write employees based on age into separate files
+def read_employee_data(filename):
+    with open(filename, "r") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            yield row
 
- "employee_id": "AA-0002",
-  "employee_name": "Priya",
-  "employee_age":34,
-  "employee_role": "Analyst",
-  "mob_number" :"8098432190"   
-},
-"employee3":{
-    
-     "employee_id": "AA-0003",
-  "employee_name": "Kavi",
-  "employee_age":39,
-  "employee_role": "software engineer",
-  "mob_number" :"8904567832"   
-},
+def write_employees_to_file(employees, filename):
+    with open(filename, "w", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=employees[0].keys())
+        writer.writeheader()
+        writer.writerows(employees)
 
-"employee4":{
+def filter_employees_by_age(employees, min_age, max_age):
+    filtered_employees = [employee
+ for employee in employees if min_age <= int(employee["Age"]) <= max_age]
+    return filtered_employees
 
- "employee_id": "AA-0004",
-  "employee_name": "Raj",
-  "employee_age":42,
-  "employee_role": "Product manager",
-  "mob_number" :"9080754321"   
-},
+employees = list(read_employee_data("employees.csv"))
+young_employees = filter_employees_by_age(employees, 0, 25)
+middle_aged_employees = filter_employees_by_age(employees, 26, 45)
 
-"employee5":{
- "employee_id": "AA-0005",
-  "employee_name": "rahu",
-  "employee_age":32,
-  "employee_role": "HR-manager",
-  "mob_number" :"7658904356"   
-},
+write_employees_to_file(young_employees, "age_under_25.csv")
+write_employees_to_file(middle_aged_employees, "age_25_to_45.csv")
 
-"employee6":{
- "employee_id": "AA-0006",
-  "employee_name": "Janani",
-  "employee_age":27,
-  "employee_role": "Designer",
-  "mob_number" :"9079690432"   
-},
+# Read the CSV files and print employees' data in JSON format
+def read_employees_from_file(filename):
+    with open(filename, "r") as file:
+        reader = csv.DictReader(file)
+        employees = list(reader)
+        return employees
 
-"employee7":{
- "employee_id": "AA-0007",
-  "employee_name": "Jagan",
-  "employee_age":22,
-  "employee_role":"intern",
-  "mob_number" :"9578904321"   
-},
+def print_employees_as_json(employees):
+    json_data = json.dumps(employees, indent=4)
+    print(json_data)
 
-"employee8":{
- "employee_id": "AA-0008",
-  "employee_name": "Mani",
-  "employee_age":40,
-  "employee_role": "salesmanager",
-  "mob_number" :"9865922314"   
-},
+young_employees = read_employees_from_file("age_under_25.csv")
+middle_aged_employees = read_employees_from_file("age_25_to_45.csv")
 
-"employee9":{
- "employee_id": "AA-0009",
-  "employee_name": "Rithu",
-  "employee_age":21,
-  "employee_role": "intern",
-  "mob_number" :"9855922034"   
-},
+print("age_25_to_45.csv:")
+print_employees_as_json(young_employees)
 
-"employee10":{
- "employee_id": "AA-0010",
-  "employee_name": "Prabhu",
-  "employee_age":33,
-  "employee_role": "intern",
-  "mob_number" :"9855522100"   
-}
-}
-new=json.dumps(employees)
-print(new)
-
-
+print("\nage_25_to_45.csv:")
+print_employees_as_json(middle_aged_employees)
